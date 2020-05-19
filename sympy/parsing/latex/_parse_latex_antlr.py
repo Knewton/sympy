@@ -389,7 +389,7 @@ def convert_func(func):
         ]:
             name = "a" + name[3:]
             expr = getattr(sympy.functions, name)(arg, evaluate=False)
-        if name in ["arsinh", "arcosh", "artanh"]:
+        if name in ["arsinh", "arcosh", "artanh", "arcsch", "arsech", "arcoth"]:
             name = "a" + name[2:]
             expr = getattr(sympy.functions, name)(arg, evaluate=False)
 
@@ -412,7 +412,7 @@ def convert_func(func):
 
         if name in [
                 "sin", "cos", "tan", "csc", "sec", "cot", "sinh", "cosh",
-                "tanh"
+                "tanh", "csch", "sech", "coth"
         ]:
             if func_pow == -1:
                 name = "a" + name

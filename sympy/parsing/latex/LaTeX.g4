@@ -59,9 +59,16 @@ FUNC_ARCCOT: '\\arccot';
 FUNC_SINH: '\\sinh';
 FUNC_COSH: '\\cosh';
 FUNC_TANH: '\\tanh';
+FUNC_CSCH: '\\csch';
+FUNC_SECH: '\\sech';
+FUNC_COTH: '\\coth';
+
 FUNC_ARSINH: '\\arsinh';
 FUNC_ARCOSH: '\\arcosh';
 FUNC_ARTANH: '\\artanh';
+FUNC_ARCSCH: '\\arcsch';
+FUNC_ARSECH: '\\arsech';
+FUNC_ARCOTH: '\\arcoth';
 
 FUNC_SQRT: '\\sqrt';
 
@@ -203,7 +210,9 @@ func_normal:
     | FUNC_ARCSIN | FUNC_ARCCOS | FUNC_ARCTAN
     | FUNC_ARCCSC | FUNC_ARCSEC | FUNC_ARCCOT
     | FUNC_SINH | FUNC_COSH | FUNC_TANH
-    | FUNC_ARSINH | FUNC_ARCOSH | FUNC_ARTANH;
+    | FUNC_CSCH | FUNC_SECH | FUNC_COTH
+    | FUNC_ARSINH | FUNC_ARCOSH | FUNC_ARTANH
+    | FUNC_ARCSCH | FUNC_ARSECH | FUNC_ARCOTH;
 
 func:
     func_normal
