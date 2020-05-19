@@ -3,7 +3,7 @@ from sympy.external import import_module
 
 from sympy import (
     Symbol, Mul, Add, Eq, Abs, sin, asin, cos, Pow,
-    csc, sec, Limit, oo, Derivative, Integral, factorial,
+    csc, csch, sec, Limit, oo, Derivative, Integral, factorial,
     sqrt, root, StrictLessThan, LessThan, StrictGreaterThan,
     GreaterThan, Sum, Product, E, log, tan, Function, binomial
 )
@@ -79,6 +79,7 @@ GOOD_PAIRS = [
     ("\\sin a \\cos b", _Mul(sin(a), cos(b))),
     ("\\sin \\cos \\theta", sin(cos(theta))),
     ("\\sin(\\cos \\theta)", sin(cos(theta))),
+    ("\\csch^2(\\theta)", csch(theta)**2),
     ("\\frac{a}{b}", a / b),
     ("\\frac{a + b}{c}", _Mul(a + b, _Pow(c, -1))),
     ("\\frac{7}{3}", _Mul(7, _Pow(3, -1))),
