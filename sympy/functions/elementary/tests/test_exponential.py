@@ -4,6 +4,7 @@ from sympy import (
     adjoint, conjugate, transpose, refine,
     sin, cos, sinh, cosh, tanh, exp_polar, re, simplify,
     AccumBounds, MatrixSymbol, Pow, gcd, Sum, Product)
+from sympy.functions.elementary.complexes import Abs
 from sympy.functions.elementary.exponential import match_real_imag
 from sympy.abc import x, y, z
 from sympy.core.expr import unchanged
@@ -445,15 +446,18 @@ def test_log_expand():
     assert e.expand() == log(5)/log(3) * log(w)
     x, y, z = symbols('x,y,z', positive=True)
     assert log(x*(y + z)).expand(mul=False) == log(x) + log(y + z)
-    assert log(log(x**2)*log(y*z)).expand() in [log(2*log(x)*log(y) +
-        2*log(x)*log(z)), log(log(x)*log(z) + log(y)*log(x)) + log(2),
-        log((log(y) + log(z))*log(x)) + log(2)]
+    assert log(log(x**2)*log(y*z)).expand() == log(log(y) + log(z)) + log(log(x)) + log(2)
     assert log(x**log(x**2)).expand(deep=False) == log(x)*log(x**2)
     assert log(x**log(x**2)).expand() == 2*log(x)**2
     x, y = symbols('x,y')
+    # if we don't know whether variables are real or complex, we can't expand
+    assert log(x**2 * y**3).expand() == log(x**2 * y**3)
     assert log(x*y).expand(force=True) == log(x) + log(y)
     assert log(x**y).expand(force=True) == y*log(x)
     assert log(exp(x)).expand(force=True) == x
+
+    x, y, z = symbols('x,y,z', real=True)
+    assert log(y**2 * x**3 * z).expand() == 2 * log(Abs(y)) + 3 * log(x) + log(z)
 
     # there's generally no need to expand out logs since this requires
     # factoring and if simplification is sought, it's cheaper to put

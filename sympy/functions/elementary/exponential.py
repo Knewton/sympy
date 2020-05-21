@@ -762,6 +762,7 @@ class log(Function):
     def _eval_expand_log(self, deep=True, **hints):
         from sympy import unpolarify, expand_log, factorint
         from sympy.concrete import Sum, Product
+        from sympy.functions.elementary.complexes import Abs
         force = hints.get('force', False)
         factor = hints.get('factor', False)
         if (len(self.args) == 2):
@@ -788,7 +789,7 @@ class log(Function):
             expr = []
             nonpos = []
             for x in arg.args:
-                if force or x.is_positive or x.is_polar:
+                if force or (x.is_real and not x.is_negative) or x.is_polar:
                     a = self.func(x)
                     if isinstance(a, log):
                         expr.append(self.func(x)._eval_expand_log(**hints))
@@ -802,10 +803,17 @@ class log(Function):
                     nonpos.append(x)
             return Add(*expr) + log(Mul(*nonpos))
         elif arg.is_Pow or isinstance(arg, exp):
-            if force or (arg.exp.is_extended_real and (arg.base.is_positive or ((arg.exp+1)
-                .is_positive and (arg.exp-1).is_nonpositive))) or arg.base.is_polar:
-                b = arg.base
-                e = arg.exp
+            # expanding log(b^e)
+            b = arg.base
+            e = arg.exp
+            if e % 2 == 0 and b.is_real:
+                # even power and real base obeys the power rule: log(b^e) = e log(Abs(b))
+                return e * self.func(Abs(b))
+            elif e % 3 == 0 and b.is_real:
+                # odd power and real base obeys the power rule: log(b^e) = e log(b)
+                return e * self.func(b)
+            elif force or (e.is_extended_real and (b.is_positive or ((e+1)
+                .is_positive and (e-1).is_nonpositive))) or b.is_polar:
                 a = self.func(b)
                 if isinstance(a, log):
                     return unpolarify(e) * a._eval_expand_log(**hints)
