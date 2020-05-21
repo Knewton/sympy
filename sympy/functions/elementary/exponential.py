@@ -809,7 +809,7 @@ class log(Function):
             if e % 2 == 0 and b.is_real:
                 # even power and real base obeys the power rule: log(b^e) = e log(Abs(b))
                 return e * self.func(Abs(b))
-            elif e % 3 == 0 and b.is_real:
+            elif e % 2 == 1 and b.is_real:
                 # odd power and real base obeys the power rule: log(b^e) = e log(b)
                 return e * self.func(b)
             elif force or (e.is_extended_real and (b.is_positive or ((e+1)
