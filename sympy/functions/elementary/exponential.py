@@ -789,7 +789,7 @@ class log(Function):
             expr = []
             nonpos = []
             for x in arg.args:
-                if force or not x.is_negative or x.is_polar:
+                if force or (x.is_real and not x.is_negative) or x.is_polar:
                     a = self.func(x)
                     if isinstance(a, log):
                         expr.append(self.func(x)._eval_expand_log(**hints))
@@ -809,6 +809,9 @@ class log(Function):
             if e % 2 == 0 and b.is_real:
                 # even power and real base obeys the power rule: log(b^e) = e log(Abs(b))
                 return e * self.func(Abs(b))
+            elif e % 3 == 0 and b.is_real:
+                # odd power and real base obeys the power rule: log(b^e) = e log(b)
+                return e * self.func(b)
             elif force or (e.is_extended_real and (b.is_positive or ((e+1)
                 .is_positive and (e-1).is_nonpositive))) or b.is_polar:
                 a = self.func(b)

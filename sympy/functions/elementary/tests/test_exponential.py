@@ -450,12 +450,14 @@ def test_log_expand():
     assert log(x**log(x**2)).expand(deep=False) == log(x)*log(x**2)
     assert log(x**log(x**2)).expand() == 2*log(x)**2
     x, y = symbols('x,y')
+    # if we don't know whether variables are real or complex, we can't expand
+    assert log(x**2 * y**3).expand() == log(x**2 * y**3)
     assert log(x*y).expand(force=True) == log(x) + log(y)
     assert log(x**y).expand(force=True) == y*log(x)
     assert log(exp(x)).expand(force=True) == x
-    x, y, z = symbols('x,y,z', real=True)
 
-    assert log(y**2 * x**4 * z).expand() == 2 * log(Abs(y)) + 4 * log(Abs(x)) + log(z)
+    x, y, z = symbols('x,y,z', real=True)
+    assert log(y**2 * x**3 * z).expand() == 2 * log(Abs(y)) + 3 * log(x) + log(z)
 
     # there's generally no need to expand out logs since this requires
     # factoring and if simplification is sought, it's cheaper to put
